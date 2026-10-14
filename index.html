@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#e0218a">
-<title>Candace's Birthday Reservation</title>
+<title>Candace Caballero's 7th Birthday Invitation</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;1,9..144,500;1,9..144,700&family=DM+Sans:wght@400;500;700&family=Pacifico&display=swap" rel="stylesheet">
@@ -84,9 +84,21 @@ input[type=text]:focus,textarea:focus{outline:0;border-color:var(--fuchsia);box-
 .seg span{display:flex;align-items:center;justify-content:center;min-height:54px;border-radius:var(--r-md);border:2px solid #f6c3de;background:#fff;font-weight:700;cursor:pointer;transition:all .18s}
 .seg input:checked+span{background:var(--fuchsia);border-color:var(--fuchsia);color:#fff;transform:translateY(-2px);box-shadow:0 6px 0 var(--deep)}
 .seg input:focus-visible+span{outline:3px solid var(--ink);outline-offset:3px}
-.stepper{display:flex;align-items:center;gap:6px;width:max-content;background:#fff;border:2px solid #f6c3de;border-radius:var(--r-pill);padding:4px}
-.stepper button{width:44px;height:44px;border:0;border-radius:50%;background:var(--blush);color:var(--deep);font:700 1.4rem var(--sans);cursor:pointer}
-.stepper output{min-width:48px;text-align:center;font:700 1.25rem var(--serif)}
+.limit{position:relative;display:flex;align-items:center;gap:16px;overflow:hidden;padding:16px;border:2px solid transparent;border-radius:var(--r-lg);
+  background:linear-gradient(#fff,var(--blush)) padding-box,linear-gradient(135deg,var(--glow),var(--fuchsia) 60%,var(--deep)) border-box;box-shadow:0 10px 24px rgba(224,33,138,.18)}
+.limit::after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 40%,rgba(255,255,255,.85) 50%,transparent 60%);transform:translateX(-120%);pointer-events:none}
+.limit.in::after{animation:sheen 1.4s .5s ease-out}
+.limit .pair{display:flex;align-items:flex-end;gap:6px;flex:none}
+.limit .tok{display:grid;place-items:center;width:54px;height:54px;border-radius:50%;background:linear-gradient(145deg,var(--glow),var(--fuchsia));box-shadow:0 4px 0 var(--deep);opacity:0;transform:scale(.4) translateY(10px);transition:transform .6s cubic-bezier(.2,1.6,.4,1),opacity .3s}
+.limit .tok.kid{width:44px;height:44px;background:linear-gradient(145deg,#ff9fd1,var(--glow));transition-delay:.18s}
+.limit .tok svg{width:62%;height:62%;fill:#fff}
+.limit .plus{align-self:center;font:700 1.3rem var(--serif);color:var(--fuchsia);opacity:0;transition:opacity .3s .12s}
+.limit.in .tok,.limit.in .plus{opacity:1;transform:none}
+.limit .txt{display:flex;flex-direction:column;gap:2px;min-width:0}
+.limit strong{font:700 1.2rem/1.2 var(--serif);color:var(--deep)}
+.limit .txt span{font-size:.9rem;line-height:1.4}
+.limit[hidden]{display:none}
+@keyframes sheen{to{transform:translateX(120%)}}
 .err{color:#c0003a;font-size:.86rem;font-weight:500;min-height:1.2em;margin-top:6px}
 .rsvp .btn{width:100%;background:var(--fuchsia);color:#fff;box-shadow:0 8px 0 var(--deep)}
 .rsvp .btn:active{box-shadow:0 2px 0 var(--deep)}
@@ -186,17 +198,20 @@ input[type=text]:focus,textarea:focus{outline:0;border-color:var(--fuchsia);box-
           </div>
           <p class="err" id="goErr"></p>
         </fieldset>
-        <div class="field" id="guestField">
-          <label id="gLabel">Guests, including you</label>
-          <div class="stepper" role="group" aria-labelledby="gLabel">
-            <button type="button" id="minus" aria-label="One fewer guest">−</button>
-            <output id="gOut" aria-live="polite">1</output>
-            <button type="button" id="plus" aria-label="One more guest">+</button>
+        <div class="field limit" id="guestField" role="note" aria-label="Each invitation admits one parent and one child">
+          <div class="pair" aria-hidden="true">
+            <span class="tok"><svg viewBox="0 0 24 24"><circle cx="12" cy="7" r="4.5"/><path d="M3.5 22c0-5.2 3.7-8.5 8.5-8.5s8.5 3.3 8.5 8.5z"/></svg></span>
+            <span class="plus">+</span>
+            <span class="tok kid"><svg viewBox="0 0 24 24"><circle cx="12" cy="9" r="4"/><path d="M5.5 22c0-4 2.8-6.5 6.5-6.5s6.5 2.5 6.5 6.5z"/></svg></span>
+          </div>
+          <div class="txt">
+            <strong>1 parent + 1 child</strong>
+            <span>Each invitation admits one child and one parent or guardian.</span>
           </div>
         </div>
         <div class="field">
-          <label for="message">A note for Candace <span style="font-weight:400;opacity:.7">(optional)</span></label>
-          <textarea id="message" placeholder="Birthday wishes, allergies, anything we should know"></textarea>
+          <label for="message">Message for the birthday celebrant <span style="font-weight:400;opacity:.7">(optional)</span></label>
+          <textarea id="message" placeholder="Write a birthday message for Candace ♥"></textarea>
         </div>
         <input class="hp" type="text" id="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
         <p class="err" id="sendErr" role="alert"></p>
@@ -252,16 +267,19 @@ $('calBtn').addEventListener('click', () => {
   a.click(); URL.revokeObjectURL(a.href);
 });
 
-/* Guest stepper + conditional field */
-let guests = 1;
-const setG = n => { guests = Math.min(10, Math.max(1, n)); $('gOut').textContent = guests; };
-$('minus').onclick = () => setG(guests - 1);
-$('plus').onclick = () => setG(guests + 1);
+/* Guest limit note (hidden when declining) */
 document.querySelectorAll('input[name=going]').forEach(r => r.addEventListener('change', () => {
   $('guestField').hidden = r.value === 'no' && r.checked;
   $('goErr').textContent = '';
 }));
 $('name').addEventListener('input', () => { $('nameErr').textContent=''; $('name').removeAttribute('aria-invalid'); });
+
+/* Reveal the guest-limit note when it scrolls into view */
+(function(){
+  const el = $('guestField');
+  if (!('IntersectionObserver' in window)) { el.classList.add('in'); return; }
+  new IntersectionObserver((es, o) => es.forEach(x => { if (x.isIntersecting) { el.classList.add('in'); o.disconnect(); } }), {threshold:.6}).observe(el);
+})();
 
 /* Submit via EmailJS */
 if (window.emailjs) emailjs.init({ publicKey: CONFIG.emailjsPublicKey });
@@ -284,7 +302,7 @@ $('form').addEventListener('submit', async e => {
     await emailjs.send(CONFIG.serviceId, CONFIG.templateId, {
       from_name: name,
       attending: yes ? 'Yes, will attend' : 'No, cannot attend',
-      guests: yes ? String(guests) : '0',
+      guests: yes ? '2 (1 parent + 1 child)' : '0',
       message: $('message').value.trim() || 'No message'
     });
     $('formBox').style.display = 'none';
